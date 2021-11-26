@@ -13,7 +13,6 @@ var isWindows = substring(os,0,7) == 'Windows'
 
 @allowed([
   'DevMachine'
-  'GitHubRunner'
 ])
 param role string = 'DevMachine'
 
@@ -205,9 +204,29 @@ resource winDevTools 'Microsoft.Compute/virtualMachines/extensions@2021-04-01'  
     autoUpgradeMinorVersion: true
     settings: {
       fileUris : [
-        'https://github.com/Gordonby/Snippets/blob/master/AzureVMCustomScriptExtension/DevVMTools.ps1?raw=true'
+        'https://github.com/Gordonby/AzureBicepVM/blob/main/customscripts/windowsdevtools.ps1?raw=true'
       ]
       commandToExecute: 'powershell.exe -ExecutionPolicy Unrestricted -File DevVMTools.ps1'
+    }
+  }
+}
+
+resource linuxDevTools 'Microsoft.Compute/virtualMachines/extensions@2021-04-01'  = if(! isWindows && role=='DevMachine') {
+  name: 'LinuxDevTools'
+  location: location
+  parent: vm
+  properties: {
+    publisher: 'Microsoft.Azure.Extensions'
+    type: 'CustomScript'
+    typeHandlerVersion: '2.1'
+    autoUpgradeMinorVersion: true
+    settings: {
+    }
+    protectedSettings: {
+      fileUris : [
+        'https://github.com/Gordonby/AzureBicepVM/blob/main/customscripts/linuxdevtools.sh?raw=true'
+      ]
+      commandToExecute: 'sh DevVMTools.sh'
     }
   }
 }
