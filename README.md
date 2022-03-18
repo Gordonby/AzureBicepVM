@@ -64,4 +64,9 @@ az deployment group create -g $rg -f ./main.bicep -p ./parameters.json -p resour
 $vmnameseed="ubujump"
 az deployment group create -g $rg -f ./main.bicep -p ./parameters.json -p os=Ubuntu2004 resourceNameSeed=$vmnameseed
 
+
+#Create a windows vm jumpbox in a different subnet
+$vmnameseed="winjumpsub"
+$subnetId="/subscriptions/###/resourceGroups/###/providers/Microsoft.Network/virtualNetworks/###/subnets/###"
+az deployment group create -g $rg -f ./main.bicep -p ./parameters.json -p resourceNameSeed=$vmnameseed subnetId=$subnetId
 ```
