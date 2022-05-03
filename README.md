@@ -9,7 +9,7 @@ Installs development tools via a bash/powershell scripts.
 
 Many of the parameter values in the bicep code are defaulted.
 The mandatory parameters can be provided via a parameters file.
-Azure Key Vault references can be used in your paramter file to more securely pass information to the Azure control plane.
+Azure Key Vault references can be used in your parameter file to more securely pass information to the Azure control plane.
 
 EG.
 

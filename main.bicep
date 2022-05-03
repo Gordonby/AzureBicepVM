@@ -16,6 +16,8 @@ var isWindows = substring(os,0,7) == 'Windows'
 ])
 param role string = 'DevMachine'
 
+param extraCommands array = []
+
 @description('The local admin username')
 param adminUsername string
 
@@ -168,7 +170,7 @@ resource uai 'Microsoft.ManagedIdentity/userAssignedIdentities@2018-11-30' =  {
 
 resource vmIdRBAC 'Microsoft.Authorization/roleAssignments@2020-03-01-preview' =  [for roleId in RBACRolesNeeded: if(doRBACAssignments) {
   scope: resourceGroup()
-  name: '${guid(vm.id, roleId)}' //guid(resourceGroup().name,vm.name,roleId)
+  name: guid(vm.id, roleId) //guid(resourceGroup().name,vm.name,roleId)
   properties: {
     principalId: uai.properties.principalId
     principalType: 'ServicePrincipal'
@@ -206,10 +208,28 @@ resource winDevTools 'Microsoft.Compute/virtualMachines/extensions@2021-04-01'  
       fileUris : [
         'https://github.com/Gordonby/AzureBicepVM/blob/main/customscripts/windowsdevtools.ps1?raw=true'
       ]
-      commandToExecute: 'powershell.exe -ExecutionPolicy Unrestricted -File DevVMTools.ps1'
+      commandToExecute: 'powershell.exe -ExecutionPolicy Unrestricted -File windowsdevtools.ps1'
     }
   }
 }
+
+// resource winExtraCommands 'Microsoft.Compute/virtualMachines/extensions@2021-04-01'  = if(isWindows && !empty(extraCommands) ) {
+//   name: 'WindowsExtraCmd'
+//   location: location
+//   parent: vm
+//   properties: {
+//     publisher: 'Microsoft.Compute'
+//     type: 'CustomScriptExtension'
+//     typeHandlerVersion: '1.7'
+//     autoUpgradeMinorVersion: true
+//     settings: {
+//       fileUris : [
+//         'https://github.com/Gordonby/AzureBicepVM/blob/main/customscripts/windowsdevtools.ps1?raw=true'
+//       ]
+//       commandToExecute: 
+//     }
+//   }
+// }
 
 resource linuxDevTools 'Microsoft.Compute/virtualMachines/extensions@2021-04-01'  = if(! isWindows && role=='DevMachine') {
   name: 'LinuxDevTools'
