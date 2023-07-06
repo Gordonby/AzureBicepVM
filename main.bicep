@@ -6,9 +6,10 @@ param subnetId string
 
 @allowed([
   'Windows2019'
+  'Windows2022'
   'Ubuntu2004'
 ])
-param os string = 'Windows2019'
+param os string = 'Windows2022'
 var isWindows = substring(os,0,7) == 'Windows'
 
 @allowed([
@@ -58,6 +59,12 @@ var osmap = {
     publisher: 'MicrosoftWindowsServer'
     offer: 'WindowsServer'
     sku: '2019-Datacenter-smalldisk'
+    version: 'latest'
+  }
+  Windows2022: {
+    publisher: 'MicrosoftWindowsServer'
+    offer: 'WindowsServer'
+    sku: '2022-Datacenter-smalldisk'
     version: 'latest'
   }
   Ubuntu2004: {
@@ -206,6 +213,7 @@ resource winDevTools 'Microsoft.Compute/virtualMachines/extensions@2021-04-01'  
     autoUpgradeMinorVersion: true
     settings: {
       fileUris : [
+        // Note: Change the URI path to fit your own repo
         'https://github.com/Gordonby/AzureBicepVM/blob/main/customscripts/windowsdevtools.ps1?raw=true'
       ]
       commandToExecute: 'powershell.exe -ExecutionPolicy Unrestricted -File windowsdevtools.ps1'
