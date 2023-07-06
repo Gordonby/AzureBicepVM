@@ -1,5 +1,4 @@
-If ((Get-ExecutionPolicy) -ne 'RemoteSigned') {Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Force}
-iwr https://chocolatey.org/install.ps1 -UseBasicParsing | iex
+Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 choco install azcopy -y
 choco install vscode -y
 choco install pwsh -y
