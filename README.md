@@ -1,7 +1,7 @@
 # Azure Bicep VM
 
 Bicep code file to deploy a Windows or Linux VM to an existing subnet.
-No private IP is assigned, therefore Azure Bastion should be used for RDP/SSH access.
+No public IP is going to be assigned, therefore Azure Bastion should be used for RDP/SSH access.
 
 Installs development tools via a bash/powershell scripts.
 
